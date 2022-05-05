@@ -1,5 +1,7 @@
-DEBUG = False
+DEBUG = True
 OBJECT_ID = 'object_2' if DEBUG == True else 'object_12'
+
+
 
 COMPANY_MAPPINGS = {
     "Anthropic": "6273806d8b96c7001fb93de2" if DEBUG == True else "62670bd12e2348001ee862e1",
