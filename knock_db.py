@@ -1,7 +1,7 @@
 import requests
-import os
 import json
 from logger import logger
+from config import DEBUG, COMPANY_MAPPINGS, OBJECT_ID,APPLICATION_ID,API_KEY
 
 
 class Knock_Object:
@@ -36,19 +36,25 @@ class Knock_Objects:
         self.list.append(obj)
 
 
-def insert_knock_objects(object_id: str, objs: Knock_Objects):
+def insert_knock_objects(objs: Knock_Objects):
     for obj in objs:
-        dict = {
-            "field_1": obj.JobName,
-            "field_2": obj.IsRemote,
-            "field_3": obj.Location,
-            "field_4": obj.Description,
-            "field_5": obj.Text,
-        }
-        # code for testing please delete
-        logger.info(
-            f'Company: {obj.company} | Name: {obj.JobName} |  IsRemote: {obj.IsRemote} |  Location: {obj.Location} |  Description {obj.Description[0:50]}')
-        # insert(object_id, dict)
+        insert_knock_object(obj)
+
+
+def insert_knock_object(obj):
+    dict = {
+        "field_7" if DEBUG else "field_164": obj.JobName,
+        "field_14" if DEBUG else "field_165": [f'{COMPANY_MAPPINGS[obj.company]}'],
+        "field_9" if DEBUG else "field_166": obj.Location,
+        "field_10" if DEBUG else "field_167": obj.Description,
+        "field_11" if DEBUG else "field_168": obj.IsRemote,
+        "field_12" if DEBUG else "field_169": obj.Text,
+    }
+
+    # code for testing please delete
+    logger.info(
+        f'Company: {obj.company} | Name: {obj.JobName}  |  IsRemote: {obj.IsRemote} |  Location: {obj.Location} | Function: {obj.Text} |  Description {obj.Description[0:50]}')
+    insert(OBJECT_ID, dict)
 
 
 def insert(object_id: str, data: dict) -> bool:
@@ -57,8 +63,8 @@ def insert(object_id: str, data: dict) -> bool:
 
     payload = json.dumps(data)
     headers = {
-        'X-Knack-REST-API-Key': os.getenv('API_KEY'),
-        'X-Knack-Application-Id': os.getenv('APPLICATION_ID'),
+        'X-Knack-REST-API-Key': API_KEY,
+        'X-Knack-Application-Id': APPLICATION_ID,
         'Content-Type': 'application/json'
     }
 
@@ -68,5 +74,5 @@ def insert(object_id: str, data: dict) -> bool:
         return True
     else:
         logger.error(
-            f'error in inserting {data} to database  | error: {response.text}')
+            f'error in inserting {payload[0:35]} to database  | error: {response.text}')
         return False

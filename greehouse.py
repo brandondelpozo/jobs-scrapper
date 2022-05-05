@@ -5,7 +5,7 @@ from logger import logger
 from knock_db import Knock_Object, Knock_Objects
 
 
-def Parse_GreenHouse_Company_Job_Data(company_id: str) -> Knock_Objects:
+def Parse_GreenHouse_Company_Job_Data(company_id: str, company_name: str) -> Knock_Objects:
     url = f'https://boards-api.greenhouse.io/v1/boards/{company_id}/jobs?content=true'
     resp = requests.get(url)
     if resp.status_code == 200:
@@ -24,10 +24,13 @@ def Parse_GreenHouse_Company_Job_Data(company_id: str) -> Knock_Objects:
                 remote = "Yes"
             name = job['title']
             description = html.unescape(job['content'])
-            text = "Text would go here..."
+            text = ""  # aka function
+            if len(job['departments']) > 0:
+                for dep in job['departments']:
+                    text += dep['name']
 
             knock_obj = Knock_Object(
-                company_id, name, remote, location, description, text)
+                company_name, name, remote, location, description, text)
             knock_lst.push(knock_obj)
         return knock_lst
     else:
