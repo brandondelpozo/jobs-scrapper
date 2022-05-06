@@ -18,6 +18,7 @@ class Knock_Objects:
     list = []
 
     def __init__(self):
+        self.list=[]
         return
 
     def __iter__(self):
@@ -53,8 +54,8 @@ def insert_knock_object(obj):
 
     # code for testing please delete
     logger.info(
-        f'Company: {obj.company} | Name: {obj.JobName}  |  IsRemote: {obj.IsRemote} |  Location: {obj.Location} | Function: {obj.Text} |  Description {obj.Description[0:50]}')
-    # insert(OBJECT_ID, dict)
+        f'Company: {obj.company} | Connection: [{COMPANY_MAPPINGS[obj.company]}] | Name: {obj.JobName}  |  IsRemote: {obj.IsRemote} |  Location: {obj.Location} | Function: {obj.Text} |  Description {obj.Description[0:50]}')
+    insert(OBJECT_ID, dict)
 
 
 def insert(object_id: str, data: dict) -> bool:

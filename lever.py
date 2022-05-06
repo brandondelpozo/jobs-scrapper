@@ -1,6 +1,7 @@
 import requests
 import html2text
 from bs4 import BeautifulSoup
+from logger import logger
 from knock_db import Knock_Objects, Knock_Object
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -39,6 +40,7 @@ def Parse_Lever_Company_Jobs_Data(company_id: str, company_name: str) -> Knock_O
             k_object.Text = category
             k_objects.push(k_object)
 
+    logger.info(f'Companies in {company_name} are {len(list(k_objects))} \n\n\n')
     return k_objects
 
 
@@ -61,7 +63,8 @@ def Parse_Lever_Company_Job_Data(url: str) -> Knock_Object:
 
     jd = ""
     for jd_s in jd_selector_eles:
-        jd += html2text.html2text(jd_s.prettify())
+        # jd += html2text.html2text(jd_s.prettify())
+        jd += jd_s.prettify()
 
     knock_obj = Knock_Object(
         "", job_title, remote, location, jd, "")

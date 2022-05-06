@@ -1,4 +1,3 @@
-# https://boards-api.greenhouse.io/v1/boards/dandy/jobs?content=true
 import requests
 import html
 from logger import logger
@@ -32,6 +31,8 @@ def Parse_GreenHouse_Company_Job_Data(company_id: str, company_name: str) -> Kno
             knock_obj = Knock_Object(
                 company_name, name, remote, location, description, text)
             knock_lst.push(knock_obj)
+
+        logger.info(f' \n\n\nCompanies in {company_name} are {len(list(knock_lst))}')
         return knock_lst
     else:
         logger.error(
